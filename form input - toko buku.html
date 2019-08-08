@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>tokobuku</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+	<div id = "tokobuku" class="container">
+		<h1> {{header}} </h1>
+
+		<div class="form-group">
+			<label>BUKU</label>
+			<input type="text" class="form-control"placeholder="input nama buku" v-model="buku">
+	    </div>
+
+	    <div class="form-group">
+			<label>KODE</label>
+			<input type="text" class="form-control"placeholder="input kode buku" v-model="kode">
+			<p class="pull-right">{{characterCount}}/4</p>
+	    </div>
+
+	    <div class="form-group">
+			<label>JUMLAH</label>
+			<input type="text" class="form-control"placeholder="input jumlah buku" v-model="jumlah">
+	    </div>
+
+	    <div class="form-group">
+			<label>HARGA</label>
+			<input type="text" class="form-control"placeholder="input harga buku" v-model="harga">
+	    </div>
+
+
+	    <h2>Detail Buku</h2>
+
+		<p> {{Buku}} </p>
+		<p> {{Kode}} </p>
+		<p> {{Jumlah}} </p>
+		<p> {{Harga}} </p>
+ 	</div>
+	<script src="https://unpkg.com/vue"></script>
+	<script>
+		var tokoBuku = new Vue ({
+			el:'#tokobuku',
+			data : {
+				header : 'PERPUSTAKAAN', 
+				buku : '',
+				kode :'', 
+				jumlah : '',
+				harga : '',
+
+			},
+			computed: {
+				Buku: function (){
+					return 'Nama Buku : ' + this.buku;
+				},
+				Kode: function (){
+					return 'Kode Buku : ' + this.kode.substr(0,4);
+				},
+				Jumlah: function (){
+					return ' Jumlah : ' + this.jumlah;
+				},
+				Harga: function (){
+					return ' Total Harga : Rp. ' + (this.harga * this.jumlah) ;
+				},
+				characterCount () {
+					return this.kode.length;
+				}
+			}
+		})
+	</script>
+
+</body>
+</html>

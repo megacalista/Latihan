@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF 8" />
+        <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>todo-list</title>
+
+        <div id="app">
+            <div>
+                    <input type="text" v-model="newTask" @keyup.enter="addTask">
+                    <button @click="addTask">Add Task</button>
+            </div>
+
+            <li v-for="item in items" :key="item.id">
+                    <input type="checkbox" @click="setStatus(item.id)">
+                    <!-- <span v-else><input type="checkbox"></span> -->
+                    <span v-if="!editId"> 
+                            <button @click="remove(item)">&times;</button>
+                            <button @click="edit(item)">Edit</button>
+                    </span>
+                    <span v-if = "editId != item.id">{{item.name}}</span>
+                    <span v-else>
+                            <input type="text" v-model="editTask">
+                            <button @click="update(item)">Update</button>
+                            <button @click="cancel(item)">Cancel</button>   
+                    </span>
+            </li>
+
+            <div>
+                {{hitungTask() }} task selesai
+            </div>
+        </div>
+    </head>
+    <body>
+            
+            <script src="https://unpkg.com/vue"></script>
+            <script>
+            var todo_app = new Vue({
+        el: "#app",
+        created() {
+          this.checkLocalTodos();
+        },
+
+            data () {
+                return {
+                    newTask:'',
+                    editTask:'',
+                    editId:null,
+                    items: [
+                        {id: 1, name: 'Makan nasi', done:false},
+                        {id: 2, name: 'Beli Gas', done:true},
+                        {id: 3, name: 'Tidur Siang', done:false},
+                        {id: 4, name: 'Olahraga', done:true},
+
+                    ],
+                   
+                }
+
+            },
+
+                methods: {
+                
+                 setStatus(id) {
+                    const tmpTodos = this.items.find(item => item.id == id);
+                    if (tmpTodos.done== "true") {
+                    tmpTodos.done = "";
+                    } else {
+                      tmpTodos.done = "true";
+                  }
+                 },
+
+
+                addTask(){
+                    // this.items.push({
+                    // name: this.newTask,
+                    // done: false,
+                    //  })
+                    // this.newTask =''
+
+                const popped = this.items.slice(-1).pop()
+                ? this.items.slice(-1).pop().id
+                : 0;
+                const dataTodo = {
+                id: popped + 1,
+                name: this.newTask,
+                done: ""
+                };
+                this.items.push(dataTodo);
+                this.newTask = ''
+                },
+
+                remove (item) {
+                   const index = this.items.indexOf(item)
+                   this.items.splice(index, 1)
+                },
+
+                hitungTask() {
+                    const tmpTodos = this.items.filter(item => item.done == "true");
+                    return tmpTodos.length;
+                },
+
+
+                edit(item) {
+                    this.editId = item.id
+                    this.editTask = item.name
+
+                },
+
+                update(item){
+                    item.name = this.editTask
+                    this.editId = null
+                    console.log(item)
+
+                }, 
+
+                cancel(){
+                    this.editId = ''
+                    this.editId =''
+                }, 
+                setLocalStorage() {
+            localStorage.setItem("items", JSON.stringify(this.todos));
+          },
+          checkLocalTodos() {
+            const localTodos = JSON.parse(localStorage.getItem("items"));
+            if (localTodos != null) {
+              this.items = localTodos;
+            }
+          }
+
+
+                 }
+           })
+
+            </script>
+    </body>
+</html>
